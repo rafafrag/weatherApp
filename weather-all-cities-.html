@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Current Weather App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"> 
+    <!--link rel="stylesheet" type="text/css" href="styles.css"-->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>  
+</head>
+<body>
+<div class="jumbotron" style="margin-bottom:0px; color:white background-color: #4aa1f3;">
+    <h2 class="text-center" style="font-size: :50px; font-weight:600;">CITY WEATHER</h2>
+</div>  
+<div class="container" style="height: 650px">
+    <div class="row" style="margin-bottom:20px">
+        <h3 class="text-center text-primary">Enter city name to see more...</h3>
+        <span id="error"></span>
+    </div>
+        
+    <div class="row form-group form-inline" id="rowDiv">
+        <input type="text" name="city" id="city" class="form-control" placeholder="City Name">
+        <button id="submitWeather" class="btn btn-primary">Search City</button>
+    </div>
+    
+    <div id="show"></div>
+</div>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function(){       
+    $('#submitWeather').click(function(){
+        var city = $("#city").val();
+        if(city != ''){
+            $.ajax({ //fetch any cities data
+                url: 'http://api.openweathermap.org/data/2.5/weather?q=' + city + "&units=metric" + "&APPID=c1f635a54c49e518cadbaf827d9126fa",
+                type: "GET",
+                dataType: "jsonp",
+                success: function(data){
+                    var widget = show(data);
+                    $("#show").html(widget);
+                    $("#city").val('');
+                }
+            });
+        }else{
+            $("#error").html('Field cannot be empty');
+        }
+    });
+    });
+function show(data){
+    return "<h5>Current Weather for: " + data.name + " , " + data.sys.country +"</h5>" +
+        "<h5>Weather: "+ data.weather[0].main + "</h5>" +
+        "<h5>Description: "+ data.weather[0].description + "</h5>" +
+        "<h5>Temperature: "+ data.main.temp + " &deg;</h5>" +
+        "<h5>Pressure: "+ data.main.pressure + " pha</h5>" +
+        "<h5>Humidity: "+ data.main.humidity + " %</h5>" +
+        "<h5>Min. Temp: "+ data.main.temp_min + " &deg;</h5>" +
+        "<h5>Max. Temp: "+ data.main.temp_max + " &deg;</h5>" +
+        "<h5>Wind Speed: "+ data.wind.speed + " m/s</h5>" + 
+        "<h5>Wind Direction: "+ data.wind.deg + " &deg</h5>";
+}  
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>   
+</body>
+</html>
+
+
